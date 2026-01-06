@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+.bun/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Raven session data (user-specific)
+.raven/state/session/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Claude Code local settings
+.claude/settings.local.json
+.claude/*.local.md

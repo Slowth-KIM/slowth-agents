@@ -1,0 +1,5 @@
+# Raven Configuration
+user_name: ""
+communication_language: "ko"
+focus_limit: 3
+auto_archive_days: 30

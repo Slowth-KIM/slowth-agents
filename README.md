@@ -10,12 +10,21 @@
 
 ## Installation
 
+In Claude Code, run:
+
 ```bash
-# Add marketplace
+# 1. Add marketplace
 /plugin marketplace add Slowth-KIM/slowth-agents
 
-# Install plugins
+# 2. Install plugin
 /plugin install raven@slowth-agents
+```
+
+### Updating
+
+```bash
+/plugin marketplace update slowth-agents
+/plugin update raven@slowth-agents
 ```
 
 ## Plugins

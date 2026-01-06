@@ -1,8 +1,6 @@
 {
-  "$schema": "https://claude.ai/schemas/plugin.json",
   "name": "raven",
   "version": "0.1.0",
-  "displayName": "Raven - GTD Agent Framework",
   "description": "GTD-based autonomous coding with specialized AI agents. Manage tasks, create PRDs, implement features, and verify code through conversational AI.",
   "author": {
     "name": "Slowth-KIM",
@@ -17,37 +15,5 @@
     "autonomous-coding",
     "prd",
     "productivity"
-  ],
-  "categories": [
-    "productivity",
-    "development",
-    "ai-agents"
-  ],
-  "icon": "🪶",
-  "agents": [
-    {
-      "name": "raven-gtd",
-      "path": "agents/raven-gtd.md",
-      "description": "GTD Task Manager - capture, clarify, organize, prioritize tasks"
-    },
-    {
-      "name": "raven-init",
-      "path": "agents/raven-init.md",
-      "description": "Context Engineer - create PRDs and analyze codebases"
-    },
-    {
-      "name": "raven-coding",
-      "path": "agents/raven-coding.md",
-      "description": "Developer - implement features with session persistence"
-    },
-    {
-      "name": "raven-tester",
-      "path": "agents/raven-tester.md",
-      "description": "QA Engineer - verify implementations against acceptance criteria"
-    }
-  ],
-  "scripts": {
-    "postinstall": "bash ${CLAUDE_PLUGIN_ROOT}/../tools/init-raven.sh"
-  },
-  "minClaudeCodeVersion": "1.0.0"
+  ]
 }

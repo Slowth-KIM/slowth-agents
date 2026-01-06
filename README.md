@@ -49,11 +49,38 @@ Create a new folder with `.claude/plugin.json`:
 
 ```
 slowth-agents/
+├── .claude-plugin/
+│   └── marketplace.json
 ├── raven/
 │   └── .claude/plugin.json
 ├── new-plugin/
 │   └── .claude/plugin.json
 └── README.md
+```
+
+## Marketplace Setup
+
+To register a repository as a marketplace, create `.claude-plugin/marketplace.json`:
+
+```json
+{
+  "$schema": "https://claude.ai/schemas/marketplace.json",
+  "name": "slowth-agents",
+  "owner": {
+    "name": "Slowth-KIM",
+    "url": "https://github.com/Slowth-KIM"
+  },
+  "displayName": "Slowth Agents",
+  "description": "A collection of AI agents for Claude Code",
+  "repository": "https://github.com/Slowth-KIM/slowth-agents",
+  "plugins": [
+    {
+      "name": "raven",
+      "source": "./raven/.claude",
+      "description": "GTD-based autonomous coding with specialized AI agents"
+    }
+  ]
+}
 ```
 
 ## License

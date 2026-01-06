@@ -1,0 +1,18 @@
+{
+  "$schema": "https://claude.ai/schemas/marketplace.json",
+  "name": "slowth-agents",
+  "displayName": "Slowth Agents",
+  "description": "A collection of AI agents for Claude Code",
+  "author": {
+    "name": "Slowth-KIM",
+    "url": "https://github.com/Slowth-KIM"
+  },
+  "repository": "https://github.com/Slowth-KIM/slowth-agents",
+  "plugins": [
+    {
+      "name": "raven",
+      "path": "raven/.claude",
+      "description": "GTD-based autonomous coding with specialized AI agents"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 id: ralph-wiggum-integration
 title: Ralph-Wiggum 자율 루프 기능 통합
 created: 2026-01-07T02:30:00+0900
-status: inbox
+status: focus
 priority: high
 tags: [feature, automation]
 ---

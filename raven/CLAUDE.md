@@ -2,6 +2,46 @@
 
 > 🪶 *"Nevermore shall you code alone"*
 
+## Installed Skills & Plugins
+
+프로젝트에 설치된 skills와 plugins를 먼저 확인하세요:
+
+```bash
+# 설치된 skills 조회
+ls -la .claude/skills/
+
+# 설치된 agents 조회
+ls -la .claude/agents/
+
+# 설치된 commands 조회
+ls -la .claude/commands/
+
+# plugin.json 확인
+cat .claude/plugin.json
+```
+
+### Available Skills
+
+| Skill | 설명 |
+|-------|------|
+| `memory-helpers` | BMAD 스타일 에이전트 메모리 관리 |
+| `raven-code` | Coding Agent 구현 프로세스 |
+| `raven-gtd` | GTD Agent 태스크 관리 프로세스 |
+| `raven-init` | Init Agent PRD 생성 프로세스 |
+| `raven-test` | Tester Agent 검증 프로세스 |
+| `prompt-engineering-patterns` | 프롬프트 엔지니어링 패턴 및 기법 |
+
+### Available Agents
+
+| Agent | 호출 | 설명 |
+|-------|------|------|
+| `raven-gtd` | `/raven:gtd` | GTD 태스크 매니저 |
+| `raven-init` | `/raven:init` | Context Engineer + PRD 생성 |
+| `raven-coding` | `/raven:code` | Senior Developer |
+| `raven-tester` | `/raven:test` | QA Engineer |
+
+---
+
 ## Overview
 
 **Raven** is an open-source AI agent framework that enables autonomous coding through interactive conversations. Built on top of Claude Code, it provides structured agents that can manage tasks, understand requirements, implement features, and verify code — all while keeping users in the loop.

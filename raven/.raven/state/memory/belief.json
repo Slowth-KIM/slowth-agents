@@ -1,0 +1,31 @@
+{
+  "updated_at": "2026-01-07T03:30:00+0900",
+  "project": {
+    "name": "raven",
+    "type": "ai-agent-framework",
+    "tech_stack": ["TypeScript", "Bun", "Claude Code"],
+    "structure_summary": "GTD-based AI agent framework with 4 core agents (GTD, Init, Coding, Tester)"
+  },
+  "codebase": {
+    "key_files": [
+      "CLAUDE.md",
+      ".raven/config.yaml",
+      ".claude/agents/*.md"
+    ],
+    "patterns": [
+      "YAML frontmatter in task files",
+      "JSON state files",
+      "Markdown agent definitions"
+    ],
+    "conventions": [
+      "Korean as primary language",
+      "GTD folder structure (inbox/focus/next/someday/done)",
+      "PRD before implementation"
+    ]
+  },
+  "current_focus": {
+    "task_id": null,
+    "understanding": null,
+    "blockers": []
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "session_id": null,
+  "agent": null,
+  "task_id": null,
+  "started_at": null,
+  "last_activity": null,
+  "plan": {
+    "steps": [],
+    "current_step": 0
+  },
+  "context": {
+    "files_read": [],
+    "files_modified": [],
+    "key_findings": []
+  },
+  "notes": [],
+  "handoff": null
+}

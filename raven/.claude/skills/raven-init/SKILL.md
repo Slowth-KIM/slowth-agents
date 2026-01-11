@@ -1,70 +1,173 @@
 ---
 name: raven-init
-description: Context Engineer를 시작합니다. 프로젝트 컨텍스트 설정, PRD 생성, 코드베이스 분석을 수행합니다.
+description: Init Agent의 세부 프로세스. 프로젝트 컨텍스트 설정, PRD 생성, 코드베이스 분석의 단계를 정의합니다.
 ---
 
-# Raven Init - Context Engineer
+# Raven Init - Context Engineer Process
 
-🚀 Context Engineering 및 PRD 생성 에이전트를 시작합니다.
+🚀 Init Agent의 세부 프로세스입니다.
 
-## 시작하기
-
-1. `.raven/` 폴더 존재 확인
-2. 없으면 초기화 안내
-3. 있으면 Init 에이전트 실행
-
-## 실행 지침
-
-### 1. 초기화 확인
-
-`.raven/state/project.json` 파일 존재 확인.
-
-**없는 경우:**
-```
-🪶 Raven이 초기화되지 않았습니다.
-
-초기화하려면: bash tools/init-raven.sh
-```
-
-### 2. 상태 로드
-
-```bash
-# 프로젝트 상태 확인
-cat .raven/state/project.json
-
-# PRD 수 확인
-find docs/prd -name "*.md" 2>/dev/null | wc -l
-```
-
-### 3. 메뉴 표시
+## Main Menu
 
 ```
 🚀 Init Agent - Context Engineer
 
-프로젝트: {name}
+프로젝트: {project_name}
 컨텍스트 초기화됨: {yes/no}
-PRD 수: {n}개
+PRD 수: {count}개
 
-무엇을 할까요?
-[1] setup - Project Context (CLAUDE.md) 설정
-[2] prd - Task PRD 생성
+[1] setup   - Project Context (CLAUDE.md) 설정
+[2] prd     - Task PRD 생성
 [3] analyze - 코드베이스 분석
-[4] status - 프로젝트 상태 확인
+[4] status  - 프로젝트 상태 확인
 [x] 종료
 ```
 
-### 4. 명령 처리
+---
 
-`.claude/agents/raven-init.md`에 정의된 명령 실행.
+## setup - Project Context 설정
 
-## 인자 처리
+### 1. 기존 컨텍스트 확인
+- CLAUDE.md 존재 여부 확인
+- 있으면: "CLAUDE.md가 이미 있습니다. 수정할까요? [y/n]"
 
-- `/raven-init setup` → 바로 CLAUDE.md 설정
-- `/raven-init prd` → PRD 생성 시작
-- `/raven-init analyze` → 코드베이스 분석
-- `/raven-init status` → 상태만 표시
+### 2. 설치된 Skills/Plugins 확인
 
-## 핸드오프
+**먼저 확인:**
+```bash
+ls -la .claude/skills/
+ls -la .claude/agents/
+cat .claude/plugin.json
+```
 
-- PRD 완료 후 구현 → `/raven-code` 안내
-- 태스크 관리 → `/raven-gtd` 안내
+### 3. 코드베이스 분석
+```bash
+git ls-tree -r --name-only HEAD 2>/dev/null || find . -type f -not -path '*/\.*'
+```
+- 주요 언어/프레임워크 식별
+- 프로젝트 구조 파악
+- 주요 명령어 (package.json, Makefile 등)
+
+### 4. 분석 결과 확인
+```
+분석 결과:
+- 언어: {languages}
+- 프레임워크: {frameworks}
+- 구조: {structure_summary}
+- 설치된 Skills: {skills}
+
+맞나요? [c] 계속 / [e] 수정
+```
+
+### 5. CLAUDE.md 생성
+섹션:
+- Installed Skills & Plugins (먼저!)
+- Project Overview
+- Tech Stack
+- Architecture
+- Key Commands
+- Code Conventions
+
+### 6. 저장
+- CLAUDE.md 작성
+- `belief-update` 실행
+- project.json 업데이트: `project_context_initialized: true`
+
+---
+
+## prd - PRD 생성
+
+### 1. 컨텍스트 확인
+- CLAUDE.md 없으면: "먼저 설정할까요? [y/n]"
+
+### 2. 태스크 선택
+- `.raven/tasks/focus/` 또는 `next/`에서 태스크 목록
+- 번호로 선택
+
+### 3. 범위 파악
+```
+추가로 알아야 할 내용이 있나요?
+[d] 직접 설명 추가
+[c] 코드 분석으로 파악
+[n] 현재 정보로 충분
+```
+
+### 4. PRD 생성
+```markdown
+---
+task_id: {task_id}
+title: {title}
+created: {timestamp}
+status: draft
+---
+
+# {title}
+
+## Overview
+## Goals
+## Acceptance Criteria
+## Technical Approach
+## Out of Scope
+## Dependencies
+```
+
+### 5. PRD 저장
+- `docs/prd/` 디렉토리 생성
+- `docs/prd/{task_id}.md` 저장
+- 태스크 파일 업데이트: `prd: docs/prd/{task_id}.md`
+- `decision-log`로 PRD 결정 기록
+
+### 6. 핸드오프
+```
+다음 단계:
+[c] Coding Agent 호출
+[f] Focus에 추가
+[x] 종료
+```
+
+---
+
+## analyze - 코드베이스 분석
+
+### 1. 구조 분석
+```bash
+find . -type d -not -path '*/\.*' | head -50
+```
+
+### 2. Tech Stack 파악
+- package.json, go.mod, Cargo.toml, requirements.txt
+
+### 3. 설치된 Skills 확인
+```bash
+ls .claude/skills/
+```
+
+### 4. 결과 표시
+- 프로젝트 구조
+- Tech Stack
+- 설치된 Skills
+- 패턴
+- 권장 다음 단계
+
+---
+
+## status - 프로젝트 상태
+
+1. `.raven/state/project.json` 읽기
+2. 상태 표시:
+   ```
+   프로젝트: {name}
+   컨텍스트 초기화됨: {yes/no}
+   마지막 활동: {last_activity}
+   설치된 Skills: {count}개
+   ```
+3. PRD 목록 표시
+
+---
+
+## BMAD Integration
+
+- **시작**: `belief-load`
+- **분석 후**: `belief-update` (코드베이스 정보)
+- **PRD 생성**: `decision-log`
+- **핸드오프**: `handoff-write`

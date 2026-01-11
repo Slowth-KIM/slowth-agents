@@ -2,6 +2,14 @@
 
 ## Done (완료)
 
+### Phase 3: Multi-Platform Adapters
+- **상태**: 구현 완료
+- **결과물**:
+  - `adapters/codex/AGENTS.md`, `adapters/codex/README.md`
+  - `adapters/cursor/.cursorrules`, `adapters/cursor/README.md`
+  - `adapters/shared/raven-core.md`
+  - `tools/install-adapter.sh`
+
 ### Session Persistence Auto-Save (v0.2.1)
 - **상태**: 구현 완료
 
@@ -29,13 +37,19 @@
 - **PRD**: `docs/prd/security-enhancement.md`
 - **상태**: 구현 완료
 
+### tester-coding-integration (구현 완료)
+- **PRD**: `docs/prd/tester-coding-integration.md`
+- **상태**: 구현 완료
+- **변경 내용**:
+  - Coding Agent에 테스트 기능 통합 (Shift-Left Testing)
+  - Tester Agent를 "심층 QA" 역할로 재정의
+  - 핸드오프 없이 단일 에이전트 내에서 구현+테스트+검증
+
 ---
 
 ## Next (준비 완료)
 
-### tester-coding-integration
-- **설명**: 별도 Tester 에이전트 대신 Coding 워크플로우에 테스트 단계 통합
-- **우선순위**: Medium
+*현재 비어있음*
 
 ---
 
@@ -92,4 +106,4 @@
 
 ---
 
-*Last updated: 2026-01-11*
+*Last updated: 2026-01-11 (cleanup complete)*

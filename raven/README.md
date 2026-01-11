@@ -90,17 +90,22 @@ raven gtd, raven init, raven code, raven test
 ## Workflow
 
 ```
-📥 GTD ──→ 🚀 Init ──→ 💻 Coding ──→ 🧪 Tester ──→ ✅ Done
-   │         (PRD)      (Implement)    (Verify)       │
-   └─────────────────── On failure ──────────────────┘
+📥 GTD ──→ 🚀 Init ──→ 💻 Coding (+ Test) ──→ ✅ Done
+   │         (PRD)      (Implement & Verify)      │
+   │                          │                   │
+   │                    🧪 Deep QA (선택)          │
+   │                          │                   │
+   └──────────────────────────┴───────────────────┘
 ```
 
 | Agent | Command | Role |
 |-------|---------|------|
 | **GTD** | `/raven:gtd` | Task capture, clarification, prioritization |
 | **Init** | `/raven:init` | PRD creation, codebase analysis |
-| **Coding** | `/raven:code` | Feature implementation with commits |
-| **Tester** | `/raven:test` | Verification against acceptance criteria |
+| **Coding** | `/raven:code` | Implementation + Testing + Verification |
+| **Tester** | `/raven:test` | Deep QA, coverage analysis (optional) |
+
+> **Integrated Testing**: Coding Agent가 구현과 테스트를 통합 수행합니다. Tester Agent는 심층 QA가 필요할 때만 선택적으로 사용합니다.
 
 ## Autonomous Loop (Ralph-Wiggum Style)
 

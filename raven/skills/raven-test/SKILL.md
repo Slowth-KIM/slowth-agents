@@ -1,98 +1,109 @@
 ---
 name: raven-test
-description: Tester Agent의 세부 프로세스. 구현 검증, 테스트 실행, 커버리지 확인, 리포트 생성의 단계를 정의합니다.
+description: Tester Agent의 심층 QA 프로세스. 커버리지 분석, Edge Case 검증, 심층 테스트, 리포트 생성의 단계를 정의합니다.
 ---
 
-# Raven Test - QA Engineer Process
+# Raven Test - Deep QA Process
 
-🧪 Tester Agent의 세부 프로세스입니다.
+🧪 Tester Agent의 심층 QA 프로세스입니다.
+
+> **Note**: 기본 테스트와 PRD 검증은 Coding Agent (`raven-code`)에 통합되어 있습니다. 이 skill은 심층 QA가 필요한 경우에 사용합니다.
 
 ## Main Menu
 
 ```
-🧪 Tester Agent - QA Engineer
+🧪 Tester Agent - Deep QA
 
-검증 대기: {n}개 태스크
 테스트 프레임워크: {detected}
+마지막 커버리지: {coverage}%
 
-[1] verify   - 구현 검증 (PRD 기준)
-[2] test     - 테스트 실행
-[3] coverage - 커버리지 확인
-[4] report   - 테스트 리포트 생성
+[1] deep-verify - 심층 검증 (Edge Cases)
+[2] coverage    - 커버리지 분석 및 개선
+[3] audit       - 코드 품질 감사
+[4] report      - 테스트 리포트 생성
 [x] 종료
 ```
 
 ---
 
-## verify - 구현 검증
+## deep-verify - 심층 검증
+
+Coding Agent의 자체 검증 이후 추가적인 심층 검증:
 
 ### 1. 컨텍스트 로드
-- `working.json` 확인 → Coding 핸드오프 노트 읽기
-- 검증 준비된 태스크 목록
-- 태스크와 PRD 로드
+- `working.json` 확인 → 최근 구현 내용 파악
+- 관련 PRD 로드
+- 변경된 파일 목록 확인
 
-### 2. 기준 추출
-PRD에서 수락 기준 파싱:
+### 2. Edge Case 분석
 ```
-검증 항목 ({count}개):
-□ 기준 1
-□ 기준 2
-□ 기준 3
-```
-
-### 3. 자동화 테스트 실행
-테스트 있으면:
-- 테스트 스위트 실행
-- 결과 요약 표시
-- 자동 pass/fail 마킹
-
-테스트 없으면:
-```
-자동화된 테스트가 없습니다.
-테스트 작성을 권장할까요? [y/n]
+Edge Case 검증 항목:
+□ 경계값 테스트
+□ null/undefined 처리
+□ 빈 입력 처리
+□ 대용량 데이터
+□ 동시성/레이스 컨디션
+□ 에러 복구
 ```
 
-### 4. 수동 검증
-각 수락 기준에 대해:
+### 3. 심층 테스트 실행
+각 Edge Case에 대해:
 ```
-"{criteria}"
-[p] Pass ✅
-[f] Fail ❌
+"{edge_case}"
+[t] 테스트 실행
+[m] 수동 검증
 [s] Skip
 ```
 
-### 5. Edge Case
+### 4. 발견 사항
 ```
-추가 edge case 검증:
-[y] 검증 진행
-[n] 스킵
-```
-
-### 6. 결과 요약
-```
-검증 결과:
-✅ Passed: {pass_count}
-❌ Failed: {fail_count}
-⏭️ Skipped: {skip_count}
-
-Overall: {pass_rate}%
+심층 검증 결과:
+✅ Verified: {pass_count}
+⚠️ Warning: {warn_count}
+❌ Issue: {issue_count}
 ```
 
-**모두 통과:**
+### 5. 이슈 보고
+이슈 발견 시:
 ```
-🎉 모든 검증 통과!
-Task를 완료 처리할까요? [y/n]
-```
-→ done/으로 이동, `working.json` 초기화
+발견된 이슈:
+1. {issue_description}
+   재현: {steps}
+   심각도: {high/medium/low}
 
-**실패 있음:**
+[c] Coding Agent에게 전달
+[i] 무시
 ```
-❌ 일부 검증 실패
-[c] Coding Agent에게 반환
-[r] 재검증
-[i] 무시하고 완료
+
+---
+
+## audit - 코드 품질 감사
+
+### 1. 분석 범위
 ```
-→ `handoff-write` (실패 기준 포함)
+감사 범위:
+[r] 최근 변경된 파일
+[a] 전체 프로젝트
+[f] 특정 폴더
+```
+
+### 2. 품질 체크리스트
+- 코드 복잡도 (Cyclomatic Complexity)
+- 중복 코드
+- 보안 취약점 패턴
+- 성능 이슈 패턴
+- 테스트 누락 영역
+
+### 3. 권고사항
+```
+품질 감사 결과:
+
+개선 필요:
+- {file}: {recommendation}
+
+권장 사항:
+- {suggestion}
+```
 
 ---
 
@@ -215,7 +226,7 @@ ls Cargo.toml
 
 ## BMAD Integration
 
-- **시작**: `belief-load`, `working.json` 핸드오프 확인
-- **검증 후**: `dialogue-save` (검증 결과 요약)
-- **실패 시**: `handoff-write` (실패 기준 포함)
-- **완료 시**: `working.json` 초기화, done/으로 이동
+- **시작**: `belief-load`, `working.json` 확인
+- **분석 후**: `dialogue-save` (분석 결과 요약)
+- **이슈 발견 시**: `handoff-write` (이슈 상세 포함) → Coding Agent
+- **리포트 생성 시**: `.raven/reports/`에 저장

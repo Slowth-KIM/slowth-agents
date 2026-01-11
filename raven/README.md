@@ -18,6 +18,8 @@
 - 💻 **Guided Implementation** - Step-by-step coding with session persistence
 - 🧪 **Automated Verification** - Test against acceptance criteria
 - 🔄 **Agent Handoffs** - Seamless workflow between agents
+- 🔁 **Autonomous Loop** - Ralph-Wiggum style self-referential iteration
+- 🔒 **Security Hooks** - Dangerous pattern detection and blocking
 
 ## Why Raven? (For Claude Code Users)
 
@@ -95,10 +97,68 @@ raven gtd, raven init, raven code, raven test
 
 | Agent | Command | Role |
 |-------|---------|------|
-| **GTD** | `/raven-gtd` | Task capture, clarification, prioritization |
-| **Init** | `/raven-init` | PRD creation, codebase analysis |
-| **Coding** | `/raven-code` | Feature implementation with commits |
-| **Tester** | `/raven-test` | Verification against acceptance criteria |
+| **GTD** | `/raven:gtd` | Task capture, clarification, prioritization |
+| **Init** | `/raven:init` | PRD creation, codebase analysis |
+| **Coding** | `/raven:code` | Feature implementation with commits |
+| **Tester** | `/raven:test` | Verification against acceptance criteria |
+
+## Autonomous Loop (Ralph-Wiggum Style)
+
+Run complex tasks autonomously without manual intervention:
+
+```bash
+/raven:loop "Build REST API with CRUD, validation, tests" --max 30 --promise "COMPLETE"
+```
+
+### How it works
+
+1. Creates loop state file (`.claude/raven-loop.local.md`)
+2. Agent works on the task
+3. On session exit, **Stop Hook** intercepts and feeds the SAME prompt back
+4. Continues until `<promise>COMPLETE</promise>` is output or max iterations reached
+
+### Loop Commands
+
+| Command | Description |
+|---------|-------------|
+| `/raven:loop` | Start autonomous loop |
+| `/raven:cancel-loop` | Cancel active loop |
+
+### Best Practices
+
+```markdown
+Build a REST API for todos.
+
+Completion criteria:
+- All CRUD endpoints working
+- Input validation in place
+- Tests passing
+- When done, output: <promise>COMPLETE</promise>
+```
+
+## Security Hooks
+
+Automatic detection and blocking of dangerous patterns:
+
+### Blocked Patterns (Always blocked)
+
+- `rm -rf /` or `rm -rf ~`
+- `git push --force origin main`
+- Fork bombs, destructive disk operations
+
+### Warning Patterns (Logged)
+
+- `rm -rf` (any recursive delete)
+- `git reset --hard`
+- `npm publish`
+
+### Protected Files
+
+- `.env`, `.env.local`, `.env.production`
+- `*.pem`, `*.key`
+- `*credentials*`, `*secret*`
+
+Security events are logged to `.claude/security-log.local.md`.
 
 ## Task Management (GTD)
 
@@ -154,23 +214,57 @@ auto_archive_days: 30
 
 ## Project Structure
 
-```
-.claude/                    # Claude Code adapter
-├── agents/
-│   └── raven-*.md
-└── skills/
-    └── raven-*.md
+Following Claude Code plugin standards (v0.2.0):
 
-adapters/                   # Other platforms
-├── codex/AGENTS.md         # OpenAI Codex CLI
-├── cursor/.cursorrules     # Cursor IDE
-└── shared/raven-core.md    # Shared instructions
-
-.raven/                     # Runtime state (created on init)
-├── tasks/                  # GTD task files
-├── state/                  # Project & session state
-└── config.yaml             # User configuration
 ```
+raven/                            # Plugin root
+├── .claude-plugin/
+│   └── plugin.json               # Plugin manifest (standard location)
+├── agents/                       # Agent definitions (at root)
+│   ├── raven-gtd.md
+│   ├── raven-init.md
+│   ├── raven-coding.md
+│   └── raven-tester.md
+├── commands/                     # Slash commands (at root)
+│   ├── gtd.md
+│   ├── init.md
+│   ├── code.md
+│   ├── test.md
+│   ├── loop.md                   # Autonomous loop
+│   └── cancel-loop.md
+├── skills/                       # Skills with SKILL.md (at root)
+│   ├── memory-helpers/
+│   ├── raven-code/
+│   ├── raven-gtd/
+│   ├── raven-init/
+│   └── raven-test/
+├── hooks/                        # Event hooks (at root)
+│   ├── hooks.json
+│   ├── raven-stop-hook.sh
+│   └── raven-security-hook.sh
+├── scripts/                      # Helper scripts
+│   ├── setup-raven-loop.sh
+│   └── cancel-raven-loop.sh
+├── .claude/                      # Runtime state only (git-ignored)
+│   └── *.local.md
+├── .raven/                       # GTD runtime state
+│   ├── tasks/
+│   ├── state/
+│   └── config.yaml
+└── docs/prd/                     # PRD documents
+```
+
+### Context Engineering Principles
+
+This plugin follows the 2026 AI Agent Development Principles:
+
+| Principle | Implementation |
+|-----------|----------------|
+| Dynamic Context | BMAD memory system, file-based state |
+| Planning First | PRD-based workflow |
+| Bash & Codegen First | Loop scripts, hook scripts |
+| Loop Iteration | Ralph-Wiggum style Stop hook |
+| Hierarchical Memory | Short/Mid/Long term in .raven/state/ |
 
 ## Inspirations
 

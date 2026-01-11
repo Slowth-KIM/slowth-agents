@@ -1,7 +1,7 @@
 {
   "name": "raven",
-  "version": "0.1.0",
-  "description": "GTD-based autonomous coding with specialized AI agents. Manage tasks, create PRDs, implement features, and verify code through conversational AI.",
+  "version": "0.2.0",
+  "description": "GTD-based autonomous coding with specialized AI agents. Features Ralph-Wiggum style autonomous loops and security hooks.",
   "author": {
     "name": "Slowth-KIM",
     "url": "https://github.com/Slowth-KIM"
@@ -14,6 +14,8 @@
     "task-management",
     "autonomous-coding",
     "prd",
-    "productivity"
+    "productivity",
+    "ralph-wiggum",
+    "security"
   ]
 }

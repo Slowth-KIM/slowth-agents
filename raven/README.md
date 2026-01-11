@@ -160,6 +160,63 @@ Automatic detection and blocking of dangerous patterns:
 
 Security events are logged to `.claude/security-log.local.md`.
 
+## Session Persistence (Auto-Save)
+
+Raven automatically tracks your work progress using hooks:
+
+### How it works
+
+```
+SessionStart Hook     → Loads previous session, shows resume prompt
+PostToolUse Hook      → Auto-tracks files read/modified
+Stop Hook             → Auto-saves session state on exit
+```
+
+### What's tracked
+
+```json
+{
+  "session_id": "session-20260111-123456",
+  "task_id": "implement-auth",
+  "plan": {
+    "steps": [
+      {"id": 1, "name": "Create user model", "status": "completed"},
+      {"id": 2, "name": "Add OAuth integration", "status": "in_progress"}
+    ],
+    "current_step": 2
+  },
+  "context": {
+    "files_read": ["src/models/user.ts", "src/config/oauth.ts"],
+    "files_modified": ["src/models/user.ts"],
+    "key_findings": ["Using Passport.js for OAuth"]
+  }
+}
+```
+
+### Session Commands
+
+| Command | Description |
+|---------|-------------|
+| `/raven:session-reset` | Clear session and start fresh |
+
+### Resume Flow
+
+```
+Session Start:
+  ┌─────────────────────────────────────────┐
+  │ 📂 Previous Session Found               │
+  │                                         │
+  │ Task: implement-auth                    │
+  │ Progress: Step 2 of 5                   │
+  │                                         │
+  │ [x] Create user model                   │
+  │ [>] Add OAuth integration (current)     │
+  │ [ ] Session management                  │
+  │ [ ] Tests                               │
+  │ [ ] Documentation                       │
+  └─────────────────────────────────────────┘
+```
+
 ## Task Management (GTD)
 
 Tasks flow through these states:

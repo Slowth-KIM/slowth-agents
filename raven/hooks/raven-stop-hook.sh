@@ -1,16 +1,45 @@
 #!/bin/bash
 
 # Raven Stop Hook
-# Implements autonomous loop functionality (Ralph-Wiggum style)
-# Prevents session exit when a raven-loop is active
+# 1. Auto-saves session state on exit
+# 2. Implements autonomous loop (Ralph-Wiggum style)
 
 set -euo pipefail
 
-# Read hook input from stdin (advanced stop hook API)
+# Read hook input from stdin
 HOOK_INPUT=$(cat)
 
-# State file location
+# State file paths
+WORKING_FILE=".raven/state/memory/working.json"
 RAVEN_LOOP_FILE=".claude/raven-loop.local.md"
+
+# ============================================
+# Part 1: Auto-save session state
+# ============================================
+
+save_session_state() {
+  if [[ -f "$WORKING_FILE" ]]; then
+    # Check if there's an active session
+    SESSION_ID=$(jq -r '.session_id // empty' "$WORKING_FILE" 2>/dev/null || echo "")
+
+    if [[ -n "$SESSION_ID" && "$SESSION_ID" != "null" ]]; then
+      # Update last_activity timestamp
+      TEMP_FILE="${WORKING_FILE}.tmp.$$"
+      jq --arg time "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+         '.last_activity = $time' "$WORKING_FILE" > "$TEMP_FILE" 2>/dev/null && \
+      mv "$TEMP_FILE" "$WORKING_FILE"
+
+      echo "Session state saved." >&2
+    fi
+  fi
+}
+
+# Always try to save session state
+save_session_state
+
+# ============================================
+# Part 2: Autonomous Loop (Ralph-Wiggum)
+# ============================================
 
 # Check if raven-loop is active
 if [[ ! -f "$RAVEN_LOOP_FILE" ]]; then
@@ -28,7 +57,6 @@ TASK_ID=$(echo "$FRONTMATTER" | grep '^task_id:' | sed 's/task_id: *//' || echo 
 
 # Validate numeric fields
 if [[ ! "$ITERATION" =~ ^[0-9]+$ ]]; then
-  echo "Raven loop: Invalid iteration value, resetting" >&2
   ITERATION=1
 fi
 
@@ -83,7 +111,6 @@ fi
 
 # Check for completion promise
 if [[ -n "$COMPLETION_PROMISE" ]] && [[ "$COMPLETION_PROMISE" != "null" ]]; then
-  # Extract text from <promise> tags
   PROMISE_TEXT=$(echo "$LAST_OUTPUT" | perl -0777 -pe 's/.*?<promise>(.*?)<\/promise>.*/$1/s; s/^\s+|\s+$//g; s/\s+/ /g' 2>/dev/null || echo "")
 
   if [[ -n "$PROMISE_TEXT" ]] && [[ "$PROMISE_TEXT" = "$COMPLETION_PROMISE" ]]; then
